@@ -1,0 +1,20 @@
+# IDE — IntelliJ IDEA
+.idea/
+*.iml
+
+# Скомпилированные файлы Java
+*.class
+
+# Папки сборки
+out/
+build/
+target/
+
+# Операционные файлы
+.DS_Store
+Thumbs.db
+
+# Логи и временные файлы
+*.log
+logs/
+temp/
