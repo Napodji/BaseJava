@@ -1,4 +1,4 @@
-package com.basejava.lesson_1.ArrayStorageImplementation;
+package com.basejava.lesson_1.array_storage_implementation;
 
 /**
  * Test for your com.basejava.lesson_1.ArrayStorageImplementation.ArrayStorage implementation
