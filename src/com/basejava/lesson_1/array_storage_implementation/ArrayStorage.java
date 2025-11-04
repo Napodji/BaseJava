@@ -28,6 +28,7 @@ public class ArrayStorage {
     Resume get(String uuid) {
         int index = findIndex(uuid);
         if (index == -1) {
+            System.out.println("Ошибка: резюме " + uuid + " не найдено");
             return null;
         }
         return storage[index];
