@@ -29,7 +29,7 @@ public class MainTestArrayStorage {
         printAll();
 
         System.out.println("Update r1");
-        r1.setUuid("uuid1");  // uuid остается тот же
+        r1.setUuid("uuid1");
         ARRAY_STORAGE.update(r1);
         printAll();
 
