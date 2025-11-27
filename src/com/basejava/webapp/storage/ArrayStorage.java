@@ -2,6 +2,8 @@ package com.basejava.webapp.storage;
 
 import com.basejava.webapp.model.Resume;
 
+import java.util.Arrays;
+
 /**
  * Array based storage for Resumes
  */
@@ -20,59 +22,49 @@ public class ArrayStorage {
             System.out.println("Ошибка: резюме с uuid " + r.getUuid() + " уже существует");
             return;
         }
-        storage[size] = r;
-        size++;
+        storage[size++] = r;
     }
 
     public Resume get(String uuid) {
-        int index = getExistingIndex(uuid);
+        int index = findIndex(uuid);
         if (index == -1) {
+            System.out.println("Ошибка: резюме с uuid " + uuid + " не найдено");
             return null;
         }
         return storage[index];
     }
 
     public Resume[] getAll() {
-        Resume[] result = new Resume[size];
-        System.arraycopy(storage, 0, result, 0, size);
-        return result;
+        return Arrays.copyOf(storage, size);
     }
 
     public void update(Resume r) {
-        int index = getExistingIndex(r.getUuid());
+        int index = findIndex(r.getUuid());
         if (index == -1) {
+            System.out.println("Ошибка: резюме с uuid " + r.getUuid() + " не найдено");
             return;
         }
         storage[index] = r;
     }
 
     public void delete(String uuid) {
-        int index = getExistingIndex(uuid);
+        int index = findIndex(uuid);
         if (index == -1) {
+            System.out.println("Ошибка: резюме с uuid " + uuid + " не найдено");
             return;
         }
-        storage[index] = storage[size - 1];
-        storage[size - 1] = null;
         size--;
+        storage[index] = storage[size];
+        storage[size] = null;
     }
 
     public void clear() {
-        for (int i = 0; i < size; i++) {
-            storage[i] = null;
-        }
+        Arrays.fill(storage, 0, size, null);
         size = 0;
     }
 
     public int size() {
         return size;
-    }
-
-    private int getExistingIndex(String uuid) {
-        int index = findIndex(uuid);
-        if (index == -1) {
-            System.out.println("Ошибка: резюме с uuid " + uuid + " не найдено");
-        }
-        return index;
     }
 
     private int findIndex(String uuid) {
