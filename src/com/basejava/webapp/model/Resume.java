@@ -5,6 +5,12 @@ package com.basejava.webapp.model;
  */
 public class Resume implements Comparable<Resume> {
 
+    public Resume() {
+    }
+
+    public Resume(String uuid) {
+        this.uuid = uuid;
+    }
     // Resume unique identifier
     private String uuid;
 
