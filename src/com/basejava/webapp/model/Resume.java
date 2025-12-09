@@ -5,14 +5,15 @@ package com.basejava.webapp.model;
  */
 public class Resume implements Comparable<Resume> {
 
+    // Unique identifier
+    private String uuid;
+
     public Resume() {
     }
 
     public Resume(String uuid) {
         this.uuid = uuid;
     }
-    // Resume unique identifier
-    private String uuid;
 
     public String getUuid() {
         return uuid;
@@ -41,8 +42,9 @@ public class Resume implements Comparable<Resume> {
     public String toString() {
         return uuid;
     }
+
     @Override
-    public int compareTo(Resume o)  {
+    public int compareTo(Resume o) {
         return uuid.compareTo(o.uuid);
     }
 }
