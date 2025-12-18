@@ -1,5 +1,8 @@
 package com.basejava.webapp.storage;
 
+import com.basejava.webapp.exception.ExistStorageException;
+import com.basejava.webapp.exception.NotExistStorageException;
+import com.basejava.webapp.exception.StorageException;
 import com.basejava.webapp.model.Resume;
 
 import java.util.Arrays;
@@ -11,7 +14,7 @@ public abstract class AbstractArrayStorage implements Storage {
     protected static final int STORAGE_LIMIT = 10000;
 
     protected Resume[] storage = new Resume[STORAGE_LIMIT];
-    private int size = 0;
+    protected int size = 0;
 
     public int size() {
         return size;
@@ -22,24 +25,22 @@ public abstract class AbstractArrayStorage implements Storage {
         size = 0;
     }
 
-    public final void save(Resume r) {
-        if (size >= STORAGE_LIMIT) {
-            System.out.println("Storage overflow");
+    public void save(Resume r) {
+        int index = findIndex(r.getUuid());
+        if (index >= 0) {
+            throw new ExistStorageException(r.getUuid());
+        } else if (size >= STORAGE_LIMIT) {
+            throw new StorageException("Storage overflow", r.getUuid());
         } else {
-            int index = findIndex(r.getUuid());
-            if (index >= 0) {
-                System.out.println("Resume " + r.getUuid() + " already exists");
-            } else {
-                insertResume(r, index);
-                size++;
-            }
+            insertResume(r, index);
+            size++;
         }
     }
 
-    public final void delete(String uuid) {
+    public void delete(String uuid) {
         int index = findIndex(uuid);
         if (index < 0) {
-            System.out.println("Resume " + uuid + " does not exist");
+            throw new NotExistStorageException(uuid);
         } else {
             fillDeletedElement(index);
             storage[size - 1] = null;
@@ -47,20 +48,19 @@ public abstract class AbstractArrayStorage implements Storage {
         }
     }
 
-    public final void update(Resume r) {
+    public void update(Resume r) {
         int index = findIndex(r.getUuid());
         if (index < 0) {
-            System.out.println("Resume " + r.getUuid() + " does not exist");
+            throw new NotExistStorageException(r.getUuid());
         } else {
             storage[index] = r;
         }
     }
 
-    public final Resume get(String uuid) {
+    public Resume get(String uuid) {
         int index = findIndex(uuid);
         if (index < 0) {
-            System.out.println("Resume " + uuid + " does not exist");
-            return null;
+            throw new NotExistStorageException(uuid);
         }
         return storage[index];
     }
