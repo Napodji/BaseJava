@@ -1,10 +1,16 @@
 package com.basejava.webapp.storage;
 
 import com.basejava.webapp.model.Resume;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-public class MapStorage extends AbstractStorage {
+/**.
+ * HashMap storage implementation (search key = UUID)
+ */
+
+public class MapUuidStorage extends AbstractStorage {
     private final Map<String, Resume> storage = new HashMap<>();
 
     @Override
@@ -13,8 +19,10 @@ public class MapStorage extends AbstractStorage {
     }
 
     @Override
-    public Resume[] getAll() {
-        return storage.values().toArray(new Resume[0]);
+    public List<Resume> getAllSorted() {
+        List<Resume> sorted = new ArrayList<>(storage.values());
+        sorted.sort(Resume.RESUME_COMPARATOR);
+        return sorted;
     }
 
     @Override
