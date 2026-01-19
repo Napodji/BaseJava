@@ -3,8 +3,18 @@ package com.basejava.webapp.storage;
 import com.basejava.webapp.exception.ExistStorageException;
 import com.basejava.webapp.exception.NotExistStorageException;
 import com.basejava.webapp.model.Resume;
+import java.util.List;
 
 public abstract class AbstractStorage implements Storage {
+    @Override
+    public List<Resume> getAllSorted() {
+        List<Resume> list = getList();
+        list.sort(Resume.RESUME_COMPARATOR);
+        return list;
+    }
+
+    protected abstract List<Resume> getList();
+
     @Override
     public final void save(Resume r) {
         Object searchKey = getNotExistingSearchKey(r.getUuid());
