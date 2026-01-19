@@ -1,15 +1,11 @@
 package com.basejava.webapp.storage;
 
 import com.basejava.webapp.model.Resume;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**.
- * HashMap storage implementation (search key = Resume object)
- */
 public class MapResumeStorage extends AbstractStorage {
     private final Map<String, Resume> storage = new HashMap<>();
 
@@ -49,10 +45,8 @@ public class MapResumeStorage extends AbstractStorage {
     }
 
     @Override
-    public List<Resume> getAllSorted() {
-        List<Resume> sorted = new ArrayList<>(storage.values());
-        sorted.sort(Resume.RESUME_COMPARATOR);
-        return sorted;
+    protected List<Resume> getList() {
+        return new ArrayList<>(storage.values());
     }
 
     @Override
