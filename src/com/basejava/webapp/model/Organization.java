@@ -34,6 +34,21 @@ public class Organization {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Organization that = (Organization) o;
+        return Objects.equals(name, that.name)
+                && Objects.equals(url, that.url)
+                && Objects.equals(positions, that.positions);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, url, positions);
+    }
+
+    @Override
     public String toString() {
         return "Organization(" + name + ", " + positions + ")";
     }
