@@ -6,14 +6,13 @@ import com.basejava.webapp.model.Resume;
 import java.util.List;
 
 public abstract class AbstractStorage implements Storage {
-    @Override
-    public List<Resume> getAllSorted() {
-        List<Resume> list = getList();
-        list.sort(Resume.RESUME_COMPARATOR);
-        return list;
-    }
+    // Реализации методов Storage
 
-    protected abstract List<Resume> getList();
+    @Override
+    public final void update(Resume r) {
+        Object searchKey = getExistingSearchKey(r.getUuid());
+        updateResume(r, searchKey);
+    }
 
     @Override
     public final void save(Resume r) {
@@ -34,10 +33,13 @@ public abstract class AbstractStorage implements Storage {
     }
 
     @Override
-    public final void update(Resume r) {
-        Object searchKey = getExistingSearchKey(r.getUuid());
-        updateResume(r, searchKey);
+    public List<Resume> getAllSorted() {
+        List<Resume> resumes = getList();
+        resumes.sort(Resume.RESUME_COMPARATOR);
+        return resumes;
     }
+
+    // Вспомогательные private методы
 
     private Object getExistingSearchKey(String uuid) {
         Object searchKey = getSearchKey(uuid);
@@ -54,6 +56,10 @@ public abstract class AbstractStorage implements Storage {
         }
         return searchKey;
     }
+
+    // Абстрактные методы
+
+    protected abstract List<Resume> getList();
 
     protected abstract Object getSearchKey(String uuid);
 
