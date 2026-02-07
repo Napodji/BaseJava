@@ -38,9 +38,9 @@ public class Organization {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Organization that = (Organization) o;
-        return Objects.equals(name, that.name)
-                && Objects.equals(url, that.url)
-                && Objects.equals(positions, that.positions);
+        return Objects.equals(name, that.name) &&
+                Objects.equals(url, that.url) &&
+                Objects.equals(positions, that.positions);
     }
 
     @Override
