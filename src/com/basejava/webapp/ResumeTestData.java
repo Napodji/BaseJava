@@ -81,9 +81,9 @@ public class ResumeTestData {
 
         System.out.println("--- КОНТАКТЫ ---");
         for (ContactType type : ContactType.values()) {
-            String value = resume.getContact(type);
-            if (value != null) {
-                System.out.println(type.getTitle() + ": " + value);
+            String contact = resume.getContact(type);
+            if (contact != null) {
+                System.out.println(type.getTitle() + ": " + contact);
             }
         }
 
