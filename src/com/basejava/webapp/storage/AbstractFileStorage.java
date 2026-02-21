@@ -66,7 +66,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     }
 
     @Override
-    protected Resume getResume(File file) {  // БЫЛО: doGet
+    protected Resume getResume(File file) {
         try {
             return doRead(new BufferedInputStream(new FileInputStream(file)));
         } catch (IOException e) {
@@ -75,14 +75,14 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     }
 
     @Override
-    protected void deleteResume(File file) {  // БЫЛО: doDelete
+    protected void deleteResume(File file) {
         if (!file.delete()) {
             throw new StorageException("File delete error", file.getName());
         }
     }
 
     @Override
-    protected void updateResume(Resume r, File file) {  // БЫЛО: doUpdate
+    protected void updateResume(Resume r, File file) {
         try {
             doWrite(r, new BufferedOutputStream(new FileOutputStream(file)));
         } catch (IOException e) {
@@ -95,7 +95,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
         File[] files = directory.listFiles();
         if (files != null) {
             for (File file : files) {
-                deleteResume(file);  // БЫЛО: doDelete
+                deleteResume(file);
             }
         }
     }
