@@ -1,12 +1,16 @@
 package com.basejava.webapp.model;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Comparator;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
-public class Resume implements Comparable<Resume> {
+public class Resume implements Comparable<Resume>, Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
     public static final Comparator<Resume> RESUME_COMPARATOR =
             Comparator.comparing(Resume::getFullName)
                     .thenComparing(Resume::getUuid);
