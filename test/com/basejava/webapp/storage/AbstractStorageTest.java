@@ -1,16 +1,23 @@
 package com.basejava.webapp.storage;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import com.basejava.webapp.ResumeTestData;
 import com.basejava.webapp.exception.ExistStorageException;
 import com.basejava.webapp.exception.NotExistStorageException;
 import com.basejava.webapp.model.Resume;
+import java.io.File;
 import java.util.List;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+
+
+
 public abstract class AbstractStorageTest {
+    protected static final File STORAGE_DIR =
+            new File("C:\\Users\\MILKcOFFee\\IdeaProjects\\Storage_for_BaseJava");
     protected Storage storage;
 
     private static final String UUID_1 = "uuid1";
