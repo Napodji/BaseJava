@@ -1,10 +1,12 @@
 package com.basejava.webapp;
 
 import java.io.File;
+import java.util.Arrays;
 
 public class MainFile {
     public static void main(String[] args) {
         File rootDir = new File("src");
+        System.out.println(rootDir.getName());
         printDirectoryTree(rootDir, "");
     }
 
@@ -13,12 +15,22 @@ public class MainFile {
 
         if (files == null) return;
 
-        for (File file : files) {
-            if (file.isDirectory()) {
-                System.out.println(indent + "[DIR]  " + file.getName());
-                printDirectoryTree(file, indent + "    ");
-            } else {
-                System.out.println(indent + "[FILE] " + file.getName());
+        // Сортировка
+        Arrays.sort(files, (f1, f2) -> {
+            if (f1.isDirectory() && !f2.isDirectory()) return -1;
+            if (!f1.isDirectory() && f2.isDirectory()) return 1;
+            return f1.getName().compareToIgnoreCase(f2.getName());
+        });
+
+        for (int i = 0; i < files.length; i++) {
+            boolean isLast = (i == files.length - 1);
+            String connector = isLast ? "└── " : "├── ";
+            String nextIndent = isLast ? "    " : "│   ";
+
+            System.out.println(indent + connector + files[i].getName());
+
+            if (files[i].isDirectory()) {
+                printDirectoryTree(files[i], indent + nextIndent);
             }
         }
     }
