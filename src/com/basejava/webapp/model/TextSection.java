@@ -1,12 +1,17 @@
 package com.basejava.webapp.model;
 
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
 import java.io.Serial;
 import java.util.Objects;
 
+@XmlAccessorType(XmlAccessType.FIELD)
 public class TextSection extends AbstractSection {
     @Serial
     private static final long serialVersionUID = 1L;
-    private final String content;
+    private String content;
+
+    public TextSection() { }
 
     public TextSection(String content) {
         Objects.requireNonNull(content, "content must not be null");
