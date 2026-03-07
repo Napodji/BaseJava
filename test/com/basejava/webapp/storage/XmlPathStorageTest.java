@@ -1,4 +1,9 @@
 package com.basejava.webapp.storage;
 
-public class XmlPathStorageTest {
+import com.basejava.webapp.storage.serializer.XmlStreamSerializer;
+
+public class XmlPathStorageTest extends AbstractStorageTest {
+    public XmlPathStorageTest() {
+        super(new PathStorage(STORAGE_DIR.getAbsolutePath(), new XmlStreamSerializer()));
+    }
 }
