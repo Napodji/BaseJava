@@ -19,6 +19,3 @@ Thumbs.db
 logs/
 temp/
 
-# Storage test files
-/storage/*
-!/storage/.gitkeep
