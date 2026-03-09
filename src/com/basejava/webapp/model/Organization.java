@@ -1,6 +1,6 @@
 package com.basejava.webapp.model;
 
-import com.basejava.webapp.util.LocalDateAdapter;
+import com.basejava.webapp.util.LocalDateXmlAdapter;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
@@ -67,9 +67,9 @@ public class Organization implements Serializable {
     public static class Position implements Serializable {
         @Serial
         private static final long serialVersionUID = 1L;
-        @XmlJavaTypeAdapter(LocalDateAdapter.class)
+        @XmlJavaTypeAdapter(LocalDateXmlAdapter.class)
         private LocalDate startDate;
-        @XmlJavaTypeAdapter(LocalDateAdapter.class)
+        @XmlJavaTypeAdapter(LocalDateXmlAdapter.class)
         private LocalDate endDate;
         private String title;
         private String description;

@@ -4,11 +4,12 @@ import com.basejava.webapp.model.AbstractSection;
 import com.basejava.webapp.model.ContactType;
 import com.basejava.webapp.model.ListSection;
 import com.basejava.webapp.model.Organization;
+import com.basejava.webapp.model.Organization.Position;
 import com.basejava.webapp.model.OrganizationSection;
-import com.basejava.webapp.model.Position;
 import com.basejava.webapp.model.Resume;
 import com.basejava.webapp.model.SectionType;
 import com.basejava.webapp.model.TextSection;
+import java.time.LocalDate;
 
 public class ResumeTestData {
     public static void main(String[] args) {
@@ -56,21 +57,23 @@ public class ResumeTestData {
         // EXPERIENCE
         resume.setSection(SectionType.EXPERIENCE, new OrganizationSection(
                 new Organization("Java Online Projects", "http://javaops.ru/",
-                        new Position("10/2013", "Сейчас", "Автор проекта",
-                                "Создание, организация и проведение Java онлайн проектов.")),
+                        new Position(LocalDate.of(2013, 10, 1), LocalDate.now(),
+                                "Автор проекта", "Создание, организация и проведение Java онлайн проектов.")),
                 new Organization("Wrike", "https://www.wrike.com/",
-                        new Position("10/2014", "01/2016", "Старший разработчик",
-                                "Проектирование и разработка онлайн платформы."))
+                        new Position(LocalDate.of(2014, 10, 1), LocalDate.of(2016, 1, 1),
+                                "Старший разработчик", "Проектирование и разработка онлайн платформы."))
         ));
 
         // EDUCATION
         resume.setSection(SectionType.EDUCATION, new OrganizationSection(
                 new Organization("Coursera", "https://www.coursera.org/",
-                        new Position("03/2013", "05/2013",
+                        new Position(LocalDate.of(2013, 3, 1), LocalDate.of(2013, 5, 1),
                                 "Functional Programming in Scala", null)),
                 new Organization("ИТМО", "http://www.ifmo.ru/",
-                        new Position("09/1993", "07/1996", "Аспирантура", null),
-                        new Position("09/1987", "07/1993", "Инженер", null))
+                        new Position(LocalDate.of(1993, 9, 1), LocalDate.of(1996, 7, 1),
+                                "Аспирантура", null),
+                        new Position(LocalDate.of(1987, 9, 1), LocalDate.of(1993, 7, 1),
+                                "Инженер", null))
         ));
 
         return resume;
