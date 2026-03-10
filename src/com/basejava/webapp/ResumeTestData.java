@@ -57,7 +57,7 @@ public class ResumeTestData {
         // EXPERIENCE
         resume.setSection(SectionType.EXPERIENCE, new OrganizationSection(
                 new Organization("Java Online Projects", "http://javaops.ru/",
-                        new Position(LocalDate.of(2013, 10, 1), LocalDate.now(),
+                        new Position(LocalDate.of(2013, 10, 1), LocalDate.of(2026, 3, 1),
                                 "Автор проекта", "Создание, организация и проведение Java онлайн проектов.")),
                 new Organization("Wrike", "https://www.wrike.com/",
                         new Position(LocalDate.of(2014, 10, 1), LocalDate.of(2016, 1, 1),
