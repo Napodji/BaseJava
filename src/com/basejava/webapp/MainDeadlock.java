@@ -7,27 +7,30 @@ public class MainDeadlock {
     public static void main(String[] args) {
         new Thread(() -> {
             synchronized (LOCK1) {
-                System.out.println("Thread A took LOCK1");
-                try {
-                    // стабильное воспроизведение deadlock
-                    Thread.sleep(100); } catch (InterruptedException e) {
-                    e.printStackTrace(); }
+                System.out.println("Thread A locked LOCK1");
+                sleep();
                 synchronized (LOCK2) {
-                    System.out.println("Thread A took LOCK2");
+                    System.out.println("Thread A locked LOCK2");
                 }
             }
         }).start();
 
         new Thread(() -> {
             synchronized (LOCK2) {
-                System.out.println("Thread B took LOCK2");
-                try {
-                    Thread.sleep(100); } catch (InterruptedException e) {
-                    e.printStackTrace(); }
+                System.out.println("Thread B locked LOCK2");
+                sleep();
                 synchronized (LOCK1) {
-                    System.out.println("Thread B took LOCK1");
+                    System.out.println("Thread B locked LOCK1");
                 }
             }
         }).start();
+    }
+
+    private static void sleep() {
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }
