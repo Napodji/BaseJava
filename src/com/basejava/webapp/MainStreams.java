@@ -11,7 +11,9 @@ public class MainStreams {
         int[] arr = {1, 2, 3, 3, 2, 3};
         System.out.println("minValue = " + minValue(arr));
 
-        List<Integer> list = List.of(1, 2, 3, 3, 2, 3);
+        List<Integer> list = Arrays.stream(arr)
+                .boxed()
+                .collect(java.util.stream.Collectors.toList());
         System.out.println("OddOrEven = " + addOrEven(list));
     }
 
