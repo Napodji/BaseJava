@@ -71,20 +71,35 @@ public class Resume implements Comparable<Resume>, Serializable {
         return sections;
     }
 
+    // ВРЕМЕННО отключено до реализации контактов/секций в БД
+    //    @Override
+    //    public boolean equals(Object o) {
+    //        if (this == o) return true;
+    //        if (o == null || getClass() != o.getClass()) return false;
+    //        Resume resume = (Resume) o;
+    //        return Objects.equals(uuid, resume.uuid) &&
+    //                Objects.equals(fullName, resume.fullName) &&
+    //                Objects.equals(contacts, resume.contacts) &&
+    //                Objects.equals(sections, resume.sections);
+    //    }
+    //
+    //    @Override
+    //    public int hashCode() {
+    //        return Objects.hash(uuid, fullName, contacts, sections);
+    //    }
+
+    // Упрощённый вариант для этапа с SqlStorage
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Resume resume = (Resume) o;
-        return Objects.equals(uuid, resume.uuid) &&
-                Objects.equals(fullName, resume.fullName) &&
-                Objects.equals(contacts, resume.contacts) &&
-                Objects.equals(sections, resume.sections);
+        return Objects.equals(uuid, resume.uuid);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(uuid, fullName, contacts, sections);
+        return Objects.hash(uuid);
     }
 
     @Override
