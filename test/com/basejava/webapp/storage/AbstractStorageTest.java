@@ -14,13 +14,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public abstract class AbstractStorageTest {
-    protected static final File STORAGE_DIR = Config.get().getStorageDir();
+    protected static final File STORAGE_DIR = Config.getInstance().getStorageDir();
     protected Storage storage;
 
-    private static final String UUID_1 = "uuid1";
-    private static final String UUID_2 = "uuid2";
-    private static final String UUID_3 = "uuid3";
-    private static final String UUID_4 = "uuid4";
+    private static final String UUID_1 = "11111111-1111-1111-1111-111111111111";
+    private static final String UUID_2 = "22222222-2222-2222-2222-222222222222";
+    private static final String UUID_3 = "33333333-3333-3333-3333-333333333333";
+    private static final String UUID_4 = "44444444-4444-4444-4444-444444444444";
 
     private static final Resume RESUME_1 = ResumeTestData.createResume(UUID_1, "Андрей Тихонов");
     private static final Resume RESUME_2 = ResumeTestData.createResume(UUID_2, "Егор Титов");

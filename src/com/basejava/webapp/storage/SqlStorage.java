@@ -2,7 +2,6 @@ package com.basejava.webapp.storage;
 
 import com.basejava.webapp.exception.NotExistStorageException;
 import com.basejava.webapp.model.Resume;
-import com.basejava.webapp.sql.ConnectionFactory;
 import com.basejava.webapp.sql.SqlHelper;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -10,12 +9,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SqlStorage implements Storage {
-    public final ConnectionFactory connectionFactory;
     private final SqlHelper sqlHelper;
 
     public SqlStorage(String dbUrl, String dbUser, String dbPassword) {
-        connectionFactory = () -> DriverManager.getConnection(dbUrl, dbUser, dbPassword);
-        sqlHelper = new SqlHelper(connectionFactory);
+        sqlHelper = new SqlHelper(
+                () -> DriverManager.getConnection(dbUrl, dbUser, dbPassword)
+        );
     }
 
     @Override
@@ -27,7 +26,7 @@ public class SqlStorage implements Storage {
     @Override
     public Resume get(String uuid) {
         return sqlHelper.executeQuery(
-                "SELECT * FROM resume r WHERE r.uuid = ?",
+                "SELECT * FROM resume r WHERE r.uuid = ?::uuid",
                 ps -> {
                     ps.setString(1, uuid);
                     try (ResultSet rs = ps.executeQuery()) {
@@ -42,7 +41,7 @@ public class SqlStorage implements Storage {
     @Override
     public void update(Resume r) {
         sqlHelper.execute(
-                "UPDATE resume SET full_name = ? WHERE uuid = ?",
+                "UPDATE resume SET full_name = ? WHERE uuid = ?::uuid",
                 ps -> {
                     ps.setString(1, r.getFullName());
                     ps.setString(2, r.getUuid());
@@ -54,8 +53,7 @@ public class SqlStorage implements Storage {
 
     @Override
     public void save(Resume r) {
-        sqlHelper.execute(
-                "INSERT INTO resume (uuid, full_name) VALUES (?, ?)",
+        sqlHelper.execute("INSERT INTO resume (uuid, full_name) VALUES (?::uuid, ?)",
                 ps -> {
                     ps.setString(1, r.getUuid());
                     ps.setString(2, r.getFullName());
@@ -66,7 +64,7 @@ public class SqlStorage implements Storage {
     @Override
     public void delete(String uuid) {
         sqlHelper.execute(
-                "DELETE FROM resume WHERE uuid = ?",
+                "DELETE FROM resume WHERE uuid = ?::uuid",
                 ps -> {
                     ps.setString(1, uuid);
                     if (ps.executeUpdate() == 0) {
