@@ -6,7 +6,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import org.postgresql.util.PSQLException;
-import org.postgresql.util.PSQLState;
 
 public class SqlHelper {
     private final ConnectionFactory connectionFactory;
