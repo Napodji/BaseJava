@@ -5,6 +5,7 @@ import com.basejava.webapp.model.ContactType;
 import com.basejava.webapp.model.Resume;
 import com.basejava.webapp.sql.SqlHelper;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
@@ -69,24 +70,26 @@ public class SqlStorage implements Storage {
 
     @Override
     public void save(Resume r) {
-        sqlHelper.execute(
-                "INSERT INTO resume (uuid, full_name) VALUES (?, ?)",
-                ps -> {
-                    ps.setObject(1, UUID.fromString(r.getUuid()));
-                    ps.setString(2, r.getFullName());
-                    ps.execute();
-                });
+        sqlHelper.transactionalExecute(conn -> {
+            try (PreparedStatement ps = conn.prepareStatement(
+                    "INSERT INTO resume (uuid, full_name) VALUES (?,?)")) {
+                ps.setObject(1, UUID.fromString(r.getUuid())); // как в прошлых заданиях
+                ps.setString(2, r.getFullName());
+                ps.execute();
+            }
 
-        for (Map.Entry<ContactType, String> e : r.getContacts().entrySet()) {
-            sqlHelper.execute(
-                    "INSERT INTO contact (resume_uuid, type, value) VALUES (?, ?, ?)",
-                    ps -> {
-                        ps.setObject(1, UUID.fromString(r.getUuid()));
-                        ps.setString(2, e.getKey().name());
-                        ps.setString(3, e.getValue());
-                        ps.execute();
-                    });
-        }
+            try (PreparedStatement ps = conn.prepareStatement(
+                    "INSERT INTO contact (resume_uuid, type, value) VALUES (?,?,?)")) {
+                for (Map.Entry<ContactType, String> e : r.getContacts().entrySet()) {
+                    ps.setObject(1, UUID.fromString(r.getUuid())); // тоже uuid
+                    ps.setString(2, e.getKey().name());
+                    ps.setString(3, e.getValue());
+                    ps.addBatch();
+                }
+                ps.executeBatch();
+            }
+            return null;
+        });
     }
 
     @Override
