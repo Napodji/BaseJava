@@ -18,4 +18,9 @@ Thumbs.db
 *.log
 logs/
 temp/
+.tmp.driveupload/
+
+# Библиотеки
+lib/
+*.jar
 
