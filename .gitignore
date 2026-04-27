@@ -24,3 +24,9 @@ temp/
 lib/
 *.jar
 
+/_.swp
+/leep(), rename took to locked, reformat code
+/son_12 add MainConcurrency with atomic counter and executor
+/storage/uuid1
+/storage/uuid2
+/storage/uuid3

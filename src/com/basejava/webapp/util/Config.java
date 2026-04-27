@@ -7,7 +7,7 @@ import java.io.InputStream;
 import java.util.Properties;
 
 public class Config {
-    private static final File PROPS = new File("config\\resumes.properties");
+    private static final String PROPS = "config/resumes.properties";
     private static final Config INSTANCE = new Config();
 
     private final File storageDir;
@@ -16,21 +16,32 @@ public class Config {
     private final String dbPassword;
 
     private Config() {
-        try (InputStream is = new FileInputStream(PROPS)) {
+        String homeDir = getHomeDir();
+        File propsFile = new File(homeDir + "/" + PROPS);
+        try (InputStream is = new FileInputStream(propsFile)) {
             Properties props = new Properties();
             props.load(is);
 
             storageDir = new File(props.getProperty("storage.dir"));
-            dbUrl = props.getProperty("db.url");
-            dbUser = props.getProperty("db.user");
+            dbUrl      = props.getProperty("db.url");
+            dbUser     = props.getProperty("db.user");
             dbPassword = props.getProperty("db.password");
         } catch (IOException e) {
-            throw new IllegalStateException("Invalid config file " + PROPS.getAbsolutePath(), e);
+            throw new IllegalStateException("Invalid config file " + propsFile.getAbsolutePath(), e);
         }
     }
 
     public static Config getInstance() {
         return INSTANCE;
+    }
+
+    // проверка на наличие homeDir
+    public static String getHomeDir() {
+        String homeDir = System.getProperty("homeDir");
+        if (homeDir == null) {
+            throw new IllegalStateException("System property 'homeDir' is not set. ");
+        }
+        return homeDir;
     }
 
     public File getStorageDir() {

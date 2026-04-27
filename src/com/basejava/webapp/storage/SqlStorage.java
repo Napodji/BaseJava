@@ -50,7 +50,9 @@ public class SqlStorage implements Storage {
                         WHERE uuid = ?
                         """,
                 ps -> {
-                    ps.setObject(1, UUID.fromString(uuid));
+                    UUID resumeUuid = UUID.fromString(uuid);
+                    ps.setObject(1, resumeUuid);
+
                     Resume r;
                     try (ResultSet rs = ps.executeQuery()) {
                         if (!rs.next()) {
@@ -70,7 +72,7 @@ public class SqlStorage implements Storage {
                                     WHERE resume_uuid = ?
                                     """,
                             psContacts -> {
-                                psContacts.setObject(1, UUID.fromString(uuid));
+                                psContacts.setObject(1, resumeUuid);
                                 try (ResultSet rs = psContacts.executeQuery()) {
                                     while (rs.next()) {
                                         addContact(rs, r);
@@ -87,7 +89,7 @@ public class SqlStorage implements Storage {
                                     WHERE resume_uuid = ?
                                     """,
                             psSections -> {
-                                psSections.setObject(1, UUID.fromString(uuid));
+                                psSections.setObject(1, resumeUuid);
                                 try (ResultSet rs = psSections.executeQuery()) {
                                     while (rs.next()) {
                                         addSection(rs, r);
@@ -104,7 +106,6 @@ public class SqlStorage implements Storage {
     @Override
     public void update(Resume r) {
         sqlHelper.transactionalExecute(conn -> {
-            // обновляем резюме
             try (PreparedStatement ps = conn.prepareStatement(
                     """
                             UPDATE resume
@@ -119,7 +120,6 @@ public class SqlStorage implements Storage {
                 }
             }
 
-            // чистим контакты
             try (PreparedStatement ps = conn.prepareStatement(
                     """
                             DELETE FROM contact
@@ -130,7 +130,6 @@ public class SqlStorage implements Storage {
                 ps.executeUpdate();
             }
 
-            // чистим секции
             try (PreparedStatement ps = conn.prepareStatement(
                     """
                             DELETE FROM section
@@ -141,7 +140,6 @@ public class SqlStorage implements Storage {
                 ps.executeUpdate();
             }
 
-            // записываем заново
             insertContacts(conn, r);
             insertSections(conn, r);
 
@@ -152,7 +150,6 @@ public class SqlStorage implements Storage {
     @Override
     public void save(Resume r) {
         sqlHelper.transactionalExecute(conn -> {
-            // резюме
             try (PreparedStatement ps = conn.prepareStatement(
                     """
                             INSERT INTO resume (uuid, full_name)
@@ -164,7 +161,6 @@ public class SqlStorage implements Storage {
                 ps.execute();
             }
 
-            // контакты и секции
             insertContacts(conn, r);
             insertSections(conn, r);
 
@@ -197,22 +193,20 @@ public class SqlStorage implements Storage {
                         ORDER BY full_name, uuid
                         """,
                 ps -> {
-                    Map<String, Resume> map = new LinkedHashMap<>();
+                    Map<String, Resume> resumesByUuid = new LinkedHashMap<>();
 
-                    // 1) тянем все резюме
                     try (ResultSet rs = ps.executeQuery()) {
                         while (rs.next()) {
                             String uuid = rs.getString("uuid");
                             String fullName = rs.getString("full_name");
-                            map.put(uuid, new Resume(uuid, fullName));
+                            resumesByUuid.put(uuid, new Resume(uuid, fullName));
                         }
                     }
 
-                    if (map.isEmpty()) {
+                    if (resumesByUuid.isEmpty()) {
                         return new ArrayList<>();
                     }
 
-                    // 2) тянем все контакты
                     sqlHelper.execute(
                             """
                                     SELECT resume_uuid, type, value
@@ -221,7 +215,7 @@ public class SqlStorage implements Storage {
                             psContacts -> {
                                 try (ResultSet rs = psContacts.executeQuery()) {
                                     while (rs.next()) {
-                                        Resume r = map.get(rs.getString("resume_uuid"));
+                                        Resume r = resumesByUuid.get(rs.getString("resume_uuid"));
                                         if (r != null) {
                                             addContact(rs, r);
                                         }
@@ -230,7 +224,6 @@ public class SqlStorage implements Storage {
                             }
                     );
 
-                    // 3) тянем все секции
                     sqlHelper.execute(
                             """
                                     SELECT resume_uuid, type, content
@@ -239,7 +232,7 @@ public class SqlStorage implements Storage {
                             psSections -> {
                                 try (ResultSet rs = psSections.executeQuery()) {
                                     while (rs.next()) {
-                                        Resume r = map.get(rs.getString("resume_uuid"));
+                                        Resume r = resumesByUuid.get(rs.getString("resume_uuid"));
                                         if (r != null) {
                                             addSection(rs, r);
                                         }
@@ -248,7 +241,7 @@ public class SqlStorage implements Storage {
                             }
                     );
 
-                    return new ArrayList<>(map.values());
+                    return new ArrayList<>(resumesByUuid.values());
                 }
         );
     }
