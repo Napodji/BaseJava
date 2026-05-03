@@ -1,5 +1,6 @@
 package com.basejava.webapp.model;
 
+import com.basejava.webapp.util.DateHelper;
 import com.basejava.webapp.util.LocalDateXmlAdapter;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
@@ -7,15 +8,20 @@ import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Organization implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
-    private Link homepage;  // название + url
+
+    public static final Organization EMPTY = new Organization("", "", Position.EMPTY);
+
+    private Link homePage;
     private List<Position> positions = new ArrayList<>();
 
     public Organization() {
@@ -29,15 +35,15 @@ public class Organization implements Serializable {
         this(new Link(name, url), positions);
     }
 
-    public Organization(Link homepage, List<Position> positions) {
-        Objects.requireNonNull(homepage, "homepage must not be null");
+    public Organization(Link homePage, List<Position> positions) {
+        Objects.requireNonNull(homePage, "homePage must not be null");
         Objects.requireNonNull(positions, "positions must not be null");
-        this.homepage = homepage;
+        this.homePage = homePage;
         this.positions = positions;
     }
 
-    public Link getHomepage() {
-        return homepage;
+    public Link getHomePage() {
+        return homePage;
     }
 
     public List<Position> getPositions() {
@@ -49,24 +55,27 @@ public class Organization implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Organization that = (Organization) o;
-        return Objects.equals(homepage, that.homepage) &&
+        return Objects.equals(homePage, that.homePage) &&
                 Objects.equals(positions, that.positions);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(homepage, positions);
+        return Objects.hash(homePage, positions);
     }
 
     @Override
     public String toString() {
-        return "Organization(" + homepage + ", " + positions + ")";
+        return "Organization(" + homePage + ", " + positions + ")";
     }
 
     @XmlAccessorType(XmlAccessType.FIELD)
     public static class Position implements Serializable {
         @Serial
         private static final long serialVersionUID = 1L;
+
+        public static final Position EMPTY = new Position();
+
         @XmlJavaTypeAdapter(LocalDateXmlAdapter.class)
         private LocalDate startDate;
         @XmlJavaTypeAdapter(LocalDateXmlAdapter.class)
@@ -74,7 +83,8 @@ public class Organization implements Serializable {
         private String title;
         private String description;
 
-        public Position() { }
+        public Position() {
+        }
 
         public Position(LocalDate startDate, LocalDate endDate, String title, String description) {
             Objects.requireNonNull(startDate, "startDate must not be null");
@@ -84,6 +94,16 @@ public class Organization implements Serializable {
             this.endDate = endDate;
             this.title = title;
             this.description = description;
+        }
+
+        // Конструктор для удобного создания позиций без явного указания LocalDate
+        public Position(int year, Month month, String title, String description) {
+            this(DateHelper.of(year, month), DateHelper.NOW, title, description);
+        }
+
+        public Position(int startYear, Month startMonth, int endYear, Month endMonth,
+                        String title, String description) {
+            this(DateHelper.of(startYear, startMonth), DateHelper.of(endYear, endMonth), title, description);
         }
 
         public LocalDate getStartDate() {

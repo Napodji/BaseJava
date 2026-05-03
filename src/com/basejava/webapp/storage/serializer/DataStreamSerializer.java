@@ -54,8 +54,8 @@ public class DataStreamSerializer implements StreamSerializer {
                         List<Organization> orgs = ((OrganizationSection) entry.getValue()).getOrganizations();
                         dos.writeInt(orgs.size());
                         for (Organization org : orgs) {
-                            dos.writeUTF(org.getHomepage().getName());
-                            dos.writeUTF(nullSafe(org.getHomepage().getUrl()));
+                            dos.writeUTF(org.getHomePage().getName());
+                            dos.writeUTF(nullSafe(org.getHomePage().getUrl()));
                             List<Organization.Position> positions = org.getPositions();
                             dos.writeInt(positions.size());
                             for (Organization.Position pos : positions) {
