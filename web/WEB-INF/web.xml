@@ -10,7 +10,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>resumeServlet</servlet-name>
-        <url-pattern>/resumes</url-pattern>
+        <url-pattern>/resume</url-pattern>
     </servlet-mapping>
 
 </web-app>
